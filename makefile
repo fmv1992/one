@@ -3,13 +3,14 @@ SHELL := /bin/bash
 ROOT_DIR := $(shell dirname $(realpath $(lastword $(MAKEFILE_LIST))))
 
 export PROJECT_NAME ?= $(notdir $(ROOT_DIR))
+export _JAVA_OPTIONS := -Xms2048m -Xmx4096m
 
 FINAL_TARGET := ???
 
 # Increase the `ulimit` to avoid: "java.nio.file.ClosedFileSystemException".
 $(shell ulimit -HSn 10000)
 
-all:
+all: nativelink test
 
 clean:
 	find . -iname 'target' -print0 | xargs -0 rm -rf
@@ -20,7 +21,7 @@ clean:
 
 # Test actions. --- {{{
 
-test: test_sbt test_bash
+test: test_scala test_bash
 
 test_bash: $(FINAL_TARGET)
 

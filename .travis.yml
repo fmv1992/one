@@ -1,0 +1,13 @@
+language: scala
+
+jdk: oraclejdk8
+
+dist: trusty
+
+scala:
+   - 2.12.8
+
+script:
+    - make docker_build docker_test
+
+# vim: set filetype=yaml fileformat=unix nowrap spell spelllang=en:
