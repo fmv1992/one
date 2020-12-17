@@ -5,7 +5,7 @@ ROOT_DIR := $(shell dirname $(realpath $(lastword $(MAKEFILE_LIST))))
 export PROJECT_NAME ?= $(notdir $(ROOT_DIR))
 export _JAVA_OPTIONS := -Xms2048m -Xmx4096m
 
-FINAL_TARGET := ???
+FINAL_TARGET := ./one/target/scala-2.11/one
 
 # Increase the `ulimit` to avoid: "java.nio.file.ClosedFileSystemException".
 $(shell ulimit -HSn 10000)
@@ -37,9 +37,7 @@ compile: $(SBT_FILES) $(SCALA_FILES)
 
 # --- }}}
 
-$(FINAL_TARGET): $(SCALA_FILES) $(SBT_FILES)
-	cd ./fmv1992_scala_utilities && sbt '+ assembly'
-	touch --no-create -m $@
+$(FINAL_TARGET): nativelink
 
 # Docker actions. --- {{{
 
