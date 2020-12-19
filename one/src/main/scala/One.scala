@@ -22,13 +22,20 @@ object One extends CLIConfigTestableMain {
   }
 
   def core(input: Iterable[String]): Iterable[String] = {
-    val lines = input.toList
-    if (lines.length != 1) {
+    val right = input.take(1).toList
+    val wrong = input.tail.take(9).toList
+    if (right.length != 1) {
       throw new RuntimeException(
-        s"Lines length is '${lines.length}' and it should be one."
+        s"Lines length is '${right.length}' and it should be '1'."
+      )
+    }
+    if (wrong.length != 0) {
+      throw new RuntimeException(
+        s"Lines length is '${right.length + wrong.length}' and it should be one. Lines: \n"
+          + (right ++ wrong).mkString("\n")
       )
     } else {
-      Iterable(lines.head)
+      right
     }
   }
 }

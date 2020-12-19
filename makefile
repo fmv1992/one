@@ -5,12 +5,14 @@ ROOT_DIR := $(shell dirname $(realpath $(lastword $(MAKEFILE_LIST))))
 export PROJECT_NAME ?= $(notdir $(ROOT_DIR))
 export _JAVA_OPTIONS := -Xms2048m -Xmx4096m
 
+SCALA_SOURCES := $(shell find . -iname '*.scala')
+CONFIG_SOURCES := $(shell find . -iname '*.conf')
 FINAL_TARGET := ./one/target/scala-2.11/one
 
 # Increase the `ulimit` to avoid: "java.nio.file.ClosedFileSystemException".
 $(shell ulimit -HSn 10000)
 
-all: nativelink test
+all: $(FINAL_TARGET)
 
 clean:
 	find . -iname 'target' -print0 | xargs -0 rm -rf
@@ -29,15 +31,15 @@ test_scala:
 	cd $(PROJECT_NAME) && sbt 'test'
 
 # ???: This tasks fails erratically but succeeds after a few retries.
-nativelink:
-	cd $(PROJECT_NAME) && sbt 'nativeLink'
+nativelink: $(FINAL_TARGET)
 
 compile: $(SBT_FILES) $(SCALA_FILES)
 	cd $(PROJECT_NAME) && sbt 'compile'
 
 # --- }}}
 
-$(FINAL_TARGET): nativelink
+$(FINAL_TARGET): $(SCALA_SOURCES) $(CONFIG_SOURCES)
+	cd $(PROJECT_NAME) && sbt 'nativeLink'
 
 # Docker actions. --- {{{
 
