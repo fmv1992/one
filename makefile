@@ -26,6 +26,7 @@ clean:
 test: test_scala test_bash
 
 test_bash: $(FINAL_TARGET)
+	find ./other/test/bash -iname '*.sh' | xargs --verbose -n 1 -- bash
 
 test_scala:
 	cd $(PROJECT_NAME) && sbt 'test'
