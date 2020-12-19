@@ -22,16 +22,21 @@ object One extends CLIConfigTestableMain {
   }
 
   def core(input: Iterable[String]): Iterable[String] = {
+    val showExtraLines = 9
     val right = input.take(1).toList
-    val wrong = input.tail.take(9).toList
+    val wrongNoTrunc = input.tail.take(showExtraLines + 1).toList
+    val wrong = if (wrongNoTrunc.length == (showExtraLines + 1)) {
+      wrongNoTrunc.take(showExtraLines) :+ "⋯ ellided lines ⋯"
+    } else { wrongNoTrunc }
+
     if (right.length != 1) {
       throw new RuntimeException(
-        s"Lines length is '${right.length}' and it should be '1'."
+        s"Lines length is at least '${right.length}' and it should be '1'."
       )
     }
     if (wrong.length != 0) {
       throw new RuntimeException(
-        s"Lines length is '${right.length + wrong.length}' and it should be one. Lines: \n"
+        s"Line count is at least '${right.length + wrong.length}' and it should be one. Lines: \n"
           + (right ++ wrong).mkString("\n")
       )
     } else {

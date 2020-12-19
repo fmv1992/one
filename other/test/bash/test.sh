@@ -8,7 +8,7 @@ set -euo pipefail
 # Close identation: }
 test -d ./.git
 
-! yes 'sample line' | ./one/target/scala-2.11/one
+! seq 1 20 | ./one/target/scala-2.11/one
 
 diff <(echo 'sample line' | ./one/target/scala-2.11/one) \
     <(echo 'sample line')
