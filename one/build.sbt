@@ -10,7 +10,7 @@ libraryDependencies += "io.github.fmv1992" %%% "scala_cli_parser" % "[0.0,9.0]"
 Global / onChangedBuildSource := ReloadOnSourceChanges
 
 artifactPath in (Compile, nativeLink) := {
-crossTarget.value / "one"
+  crossTarget.value / "one"
 }
 
 enablePlugins(ScalaNativePlugin)

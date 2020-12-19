@@ -8,7 +8,8 @@ import fmv1992.fmv1992_scala_utilities.util.Reader
 
 object One extends CLIConfigTestableMain {
 
-  @inline override final val CLIConfigPath: String = S.putabspath("src/main/resources/cli_config.conf")
+  @inline override final val CLIConfigPath: String =
+    S.putabspath("src/main/resources/cli_config.conf")
   val programName: String = "one"
   val version: String = "0.0.1"
 
