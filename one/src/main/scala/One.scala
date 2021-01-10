@@ -17,7 +17,7 @@ object One extends CLIConfigTestableMain {
   def testableMain(
       args: Seq[fmv1992.scala_cli_parser.Argument]
   ): Iterable[String] = {
-    val stdin = Stream.continually(scala.io.StdIn.readLine).takeWhile(_ != null)
+    val stdin = Stream.continually(scala.io.StdIn.readLine()).takeWhile(_ != null)
     core(stdin)
   }
 
