@@ -33,6 +33,30 @@ test:
 	cd ./$(PROJECT_NAME) \
         && sbt '+ test'
 
+# Docker actions. --- {{{
+
+docker_build:
+	docker build \
+        --file ./dockerfile \
+        --tag $(PROJECT_NAME) \
+        --build-arg project_name=$(PROJECT_NAME) \
+        -- . \
+        1>&2
+
+docker_run:
+	docker run \
+        --interactive \
+        --rm \
+        --tty \
+        --entrypoint '' \
+        $(PROJECT_NAME) \
+        $(if $(DOCKER_CMD),$(DOCKER_CMD),bash)
+
+docker_test:
+	DOCKER_CMD='make test' make docker_run
+
+# --- }}}
+
 .FORCE:
 
 # vim: set noexpandtab foldmethod=marker fileformat=unix filetype=make nowrap foldtext=foldtext():
