@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/fmv1992/one.svg?branch=dev)](https://travis-ci.org/fmv1992/one)
+
 # `one`
 
 If the stdin has only one line prints it. Otherwise fails.
