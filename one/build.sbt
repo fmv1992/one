@@ -80,7 +80,10 @@ lazy val scalaNativeSettings = Seq(
   nativeLinkStubs in runMain := true,
   nativeLinkStubs in Test := true,
   Test / nativeLinkStubs := true,
-  sources in (Compile, doc) := Seq.empty
+  sources in (Compile, doc) := Seq.empty,
+  artifactPath in (Compile, nativeLink) := {
+    file("target/one")
+  }
 )
 
 lazy val crossProj: sbtcrossproject.CrossProject =
