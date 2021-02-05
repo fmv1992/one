@@ -110,6 +110,8 @@ lazy val crossProjectNative: sbt.Project =
 lazy val root: sbt.Project = (project in file("."))
   .settings(
     publish / skip := true,
+    compile / skip := true,
+    test / skip := true,
     doc / aggregate := false,
     crossScalaVersions := Nil,
     packageDoc / aggregate := false
