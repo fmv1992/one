@@ -8,8 +8,8 @@ import fmv1992.fmv1992_scala_utilities.util.Reader
 
 object One extends CLIConfigTestableMain {
 
-  @inline override final val CLIConfigPath: String =
-    S.putabspath("src/main/resources/cli_config.conf")
+  @inline override final val CLIConfigContents: String =
+    S.putfile("src/main/resources/cli_config.conf")
   val programName: String = "one"
   val version: String = "0.0.1"
 
@@ -17,7 +17,11 @@ object One extends CLIConfigTestableMain {
   def testableMain(
       args: Seq[fmv1992.scala_cli_parser.Argument]
   ): Iterable[String] = {
-    val stdin = Stream.continually(scala.io.StdIn.readLine).takeWhile(_ != null)
+
+    // Read all stdin lazily.
+    val stdin =
+      Stream.continually(scala.io.StdIn.readLine()).takeWhile(_ != null)
+
     core(stdin)
   }
 
@@ -25,8 +29,10 @@ object One extends CLIConfigTestableMain {
     val showExtraLines = 9
     val right = input.take(1).toList
     val wrongNoTrunc = input.tail.take(showExtraLines + 1).toList
+
+    // Add elided lines in case there are many lines.
     val wrong = if (wrongNoTrunc.length == (showExtraLines + 1)) {
-      wrongNoTrunc.take(showExtraLines) :+ "⋯ ellided lines ⋯"
+      wrongNoTrunc.take(showExtraLines) :+ "⋯ elided lines ⋯"
     } else { wrongNoTrunc }
 
     if (right.length != 1) {
@@ -36,7 +42,7 @@ object One extends CLIConfigTestableMain {
     }
     if (wrong.length != 0) {
       throw new RuntimeException(
-        s"Line count is at least '${right.length + wrong.length}' and it should be one. Lines: \n"
+        s"Line count is at least '${right.length + wrong.length}' and it should be '1'. Lines: \n"
           + (right ++ wrong).mkString("\n")
       )
     } else {
