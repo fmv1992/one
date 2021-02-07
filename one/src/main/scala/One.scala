@@ -5,6 +5,15 @@ import fmv1992.scala_cli_parser.Argument
 
 import fmv1992.fmv1992_scala_utilities.util.S
 
+import zio._
+import zio.App
+
+// Unfortunately I can't do that
+// (<https://gitter.im/scala/scala?at=601db0719fa6765ef8fedc97>):
+//
+// ```
+// object One extends App with CLIConfigTestableMain {
+// ```
 object One extends CLIConfigTestableMain {
 
   @inline override final val CLIConfigContents: String =
@@ -14,7 +23,7 @@ object One extends CLIConfigTestableMain {
 
   // Members declared in fmv1992.scala_cli_parser.TestableMain
   def testableMain(
-      args: Seq[fmv1992.scala_cli_parser.Argument]
+      args: Seq[Argument]
   ): Iterable[String] = {
 
     // Read all stdin lazily.
@@ -48,4 +57,39 @@ object One extends CLIConfigTestableMain {
       right
     }
   }
+
+  override def main(args: Array[String]): URIO[ZEnv, ExitCode] = ???
+
+  // override final def main(args: Array[String]): Unit = {
+  //   // What do I want here?
+  //   //
+  //   // 1. The exit code from zio.
+  //   // 2. The automatic parsing of the conf file.
+  //   // 3. The executing logic of `super[CLIConfigTestableMain].main`.
+  //   ???
+  // }
+
+  object innerZIO extends zio.App {
+    def run(args: List[String]): URIO[ZEnv, ExitCode] = ???
+  }
+
 }
+
+// object MyPrg {
+//
+//   trait Fixed {
+//
+//     final def main(args0: Array[String]): Unit = ()
+//
+//   }
+//
+//   trait SomewhatFlexible {
+//
+//     final def main(args0: Array[String]): Unit = ()
+//
+//   }
+//
+//   // object MyObject extends Fixed with SomewhatFlexible {}  // Fails.
+//   object MyObject extends SomewhatFlexible  with Fixed {}  // Fails.
+//
+// }

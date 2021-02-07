@@ -50,21 +50,24 @@ lazy val commonDependencies = Seq(
         List(
           "org.scala-lang.modules" %%% "scala-collection-compat" % "2.2.0",
           "org.scalatest" %%% "scalatest" % "3.2.2" % Test,
-          "io.github.fmv1992" %%% "scala_cli_parser" % "0.2.0"
+          "io.github.fmv1992" %%% "scala_cli_parser" % "0.2.0",
+          "dev.zio" %%% "zio" % "1.0.4"
         )
       case Some((2, n)) if n == 12 =>
         List(
           "com.sandinh" %% "scala-rewrites" % "0.1.10-sd",
           "org.scala-lang.modules" %%% "scala-collection-compat" % "2.2.0",
           "org.scalatest" %%% "scalatest" % "3.2.2" % Test,
-          "io.github.fmv1992" %%% "scala_cli_parser" % "0.2.0"
+          "io.github.fmv1992" %%% "scala_cli_parser" % "0.2.0",
+          "dev.zio" %%% "zio" % "1.0.4"
         )
       case Some((2, n)) if n == 13 =>
         List(
           "com.sandinh" %% "scala-rewrites" % "0.1.10-sd",
           "org.scala-lang.modules" %%% "scala-collection-compat" % "2.2.0",
           "org.scalatest" %%% "scalatest" % "3.2.2" % Test,
-          "io.github.fmv1992" %%% "scala_cli_parser" % "0.2.0"
+          "io.github.fmv1992" %%% "scala_cli_parser" % "0.2.0",
+          "dev.zio" %%% "zio" % "1.0.4"
         )
       case _ => Nil
     }
