@@ -17,7 +17,12 @@ ENV PATH $JAVA_HOME/bin:$PATH
 # Install support programs.
 RUN apt-get install --yes git make wget zip
 # Install Scala Native dependencies.
-RUN apt-get install --yes clang libgc-dev libuv-dev
+RUN apt-get install --yes \
+    clang \
+    libgc-dev \
+    libuv1 \
+    libuv1-dev
+    # libuv-dev
 
 # Cleanup installation.
 RUN rm -rf /var/lib/apt/lists/*
