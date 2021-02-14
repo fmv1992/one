@@ -64,22 +64,3 @@ object One extends zio.App {
   def run(args: List[String]): URIO[ZEnv, ExitCode] = ???
 
 }
-
-// object MyPrg {
-//
-//   trait Fixed {
-//
-//     final def main(args0: Array[String]): Unit = ()
-//
-//   }
-//
-//   trait SomewhatFlexible {
-//
-//     final def main(args0: Array[String]): Unit = ()
-//
-//   }
-//
-//   // object MyObject extends Fixed with SomewhatFlexible {}  // Fails.
-//   object MyObject extends SomewhatFlexible  with Fixed {}  // Fails.
-//
-// }

@@ -51,13 +51,14 @@ lazy val commonDependencies = Seq(
           "com.sandinh" %% "scala-rewrites" % "0.1.10-sd",
           "org.scalatest" %%% "scalatest" % "3.2.4-M1" % Test,
           "io.github.fmv1992" %%% "scala_cli_parser" % "0.2.0",
-          "dev.zio" %% "zio" % zioVersion,
-          "dev.zio" %% "zio-test" % zioVersion % "test",
+          "dev.zio" %%% "zio" % zioVersion,
+          "dev.zio" %%% "zio-test" % zioVersion % "test",
           "dev.zio" %% "zio-test-sbt" % zioVersion % "test",
         )
       case _ => Nil
     }
   },
+  mainClass in Compile := Some("fmv1992.one.One"),
 )
 
 lazy val commonSettingsAndDependencies = commonSettings ++ commonDependencies
@@ -85,6 +86,7 @@ lazy val crossProj: sbtcrossproject.CrossProject =
     .settings(commonSettingsAndDependencies)
     .jvmSettings(
       crossScalaVersions := versionsJVM,
+      mainClass in assembly := Some("fmv1992.one.One"),
     )
     .nativeSettings(
       scalaNativeSettings,

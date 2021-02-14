@@ -8,9 +8,11 @@ export PROJECT_NAME ?= $(notdir $(ROOT_DIR))
 SBT_FILES := $(shell find $(PROJECT_NAME) -iname 'build.sbt')
 SCALA_FILES := $(shell find $(PROJECT_NAME) -iname '*.scala')
 
+SCALA_NATIVE_BINARY := ./one/target/one
+
 export _JAVA_OPTIONS ?= -Xms2048m -Xmx4096m
 
-all: test format clean
+all: $(SCALA_NATIVE_BINARY) test format clean
 
 format:
 	scalafmt --config ./$(PROJECT_NAME)/.scalafmt.conf $(SCALA_FILES) $(SBT_FILES)
@@ -29,9 +31,22 @@ clean:
 	find . -iname '*.hnir' -print0 | xargs -0 rm -rf
 	find . -type d -empty -delete
 
-test:
+test: host_test
+
+host_test: host_test_sbt host_test_bash
+
+host_test_sbt:
 	cd ./$(PROJECT_NAME) \
         && sbt '+ test'
+
+host_test_bash:
+	bash -xv ./other/test/bash/test.sh
+
+nativelink: $(SCALA_NATIVE_BINARY)
+
+$(SCALA_NATIVE_BINARY): $(SCALA_FILES) $(SBT_FILES)
+	cd ./$(PROJECT_NAME) \
+        && sbt nativeLink
 
 # Docker actions. --- {{{
 
@@ -53,7 +68,7 @@ docker_run:
         $(if $(DOCKER_CMD),$(DOCKER_CMD),bash)
 
 docker_test:
-	DOCKER_CMD='make test' make docker_run
+	DOCKER_CMD='make host_test' make docker_run
 
 # --- }}}
 
