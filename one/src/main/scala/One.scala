@@ -26,12 +26,15 @@ object One extends zio.App {
     def testableMain(
         args: Seq[Argument],
     ): Iterable[String] = {
+      // testableMainZIO(args).
+      // https://gitter.im/ZIO/Core?at=60297cc56825b964d60c704b
+      ???
+    }
 
-      // Read all stdin lazily.
-      val stdin =
-        Stream.continually(scala.io.StdIn.readLine()).takeWhile(_ != null)
-
-      core(stdin)
+    def testableMainZIO(
+        args: Seq[Argument],
+    ): ZIO[Any, Throwable, Iterable[String]] = {
+      ???
     }
 
     def core(input: Iterable[String]): Iterable[String] = {

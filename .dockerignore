@@ -1,3 +1,10 @@
 **/.bloop
+**/.bsp
+dockerfile
+.dockerignore
+.gitignore
+# **/.git  # → Used by `one:39d3f40:other/test/bash/test.sh:9`.
 **/.metals
+**/metals.sbt
 **/target
+.travis.yml

@@ -19,6 +19,7 @@ inThisBuild(
     semanticdbEnabled := true,
     semanticdbOptions += "-P:semanticdb:synthetics:on", // make sure to add this
     semanticdbVersion := scalafixSemanticdb.revision,
+    libraryDependencies += "org.scalameta" % "semanticdb-scalac-core" % "4.4.6" cross CrossVersion.full,
     scalafixScalaBinaryVersion := CrossVersion.binaryScalaVersion(
       scalaVersion.value,
     ),

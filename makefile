@@ -8,6 +8,9 @@ export PROJECT_NAME ?= $(notdir $(ROOT_DIR))
 SBT_FILES := $(shell find $(PROJECT_NAME) -iname 'build.sbt')
 SCALA_FILES := $(shell find $(PROJECT_NAME) -iname '*.scala')
 
+SBT_VERSION := $(shell grep --fixed-strings 'sbt.version' -- $(PROJECT_NAME)/project/build.properties | sed -E 's/.*=//g')
+SCALA_VERSION := 2.13.4
+
 SCALA_NATIVE_BINARY := ./one/target/one
 
 export _JAVA_OPTIONS ?= -Xms2048m -Xmx4096m
@@ -55,6 +58,8 @@ docker_build:
         --file ./dockerfile \
         --tag $(PROJECT_NAME) \
         --build-arg project_name=$(PROJECT_NAME) \
+        --build-arg sbt_version=$(SBT_VERSION) \
+        --build-arg scala_version=$(SCALA_VERSION) \
         -- . \
         1>&2
 
