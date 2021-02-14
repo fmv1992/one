@@ -22,6 +22,8 @@ But this one fails (and it does not print anything) if it reads more than 1 line
 
 *   Generalize this program with `--n` with default of `1`.
 
+*   Expand tests: `one:8ec5b90:other/test/bash/test.sh:17`.
+
 *   Add Travis CI support.
 
 *   Test `stderr` message.
