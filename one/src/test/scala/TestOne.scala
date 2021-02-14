@@ -4,13 +4,13 @@ class TestOne extends org.scalatest.funsuite.AnyFunSuite {
   test("Easiest test.") {
     val invalidInput01 = 0 to 10 map (_.toString)
     assertThrows[RuntimeException] {
-      One.core(invalidInput01)
+      One.InnerCLIConfigTestableMain.core(invalidInput01)
     }
     val invalidInput02 = Iterable()
     assertThrows[RuntimeException] {
-      One.core(invalidInput02)
+      One.InnerCLIConfigTestableMain.core(invalidInput02)
     }
     def validInput = Iterable("single line")
-    assert(validInput === One.core(validInput))
+    assert(validInput === One.InnerCLIConfigTestableMain.core(validInput))
   }
 }

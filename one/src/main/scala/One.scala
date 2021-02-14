@@ -6,7 +6,6 @@ import fmv1992.scala_cli_parser.Argument
 import fmv1992.fmv1992_scala_utilities.util.S
 
 import zio._
-import zio.App
 
 // Unfortunately I can't do that
 // (<https://gitter.im/scala/scala?at=601db0719fa6765ef8fedc97>):
@@ -14,64 +13,55 @@ import zio.App
 // ```
 // object One extends App with CLIConfigTestableMain {
 // ```
-object One extends CLIConfigTestableMain {
+object One extends zio.App {
 
-  @inline override final val CLIConfigContents: String =
-    S.putfile("src/main/resources/cli_config.conf")
-  val programName: String = "one"
-  val version: String = "0.0.1"
+  object InnerCLIConfigTestableMain extends CLIConfigTestableMain {
 
-  // Members declared in fmv1992.scala_cli_parser.TestableMain
-  def testableMain(
-      args: Seq[Argument]
-  ): Iterable[String] = {
+    @inline override final val CLIConfigContents: String =
+      S.putfile("src/main/resources/cli_config.conf")
+    val programName: String = "one"
+    val version: String = "0.0.1"
 
-    // Read all stdin lazily.
-    val stdin =
-      Stream.continually(scala.io.StdIn.readLine()).takeWhile(_ != null)
+    // Members declared in fmv1992.scala_cli_parser.TestableMain
+    def testableMain(
+        args: Seq[Argument],
+    ): Iterable[String] = {
 
-    core(stdin)
-  }
+      // Read all stdin lazily.
+      val stdin =
+        Stream.continually(scala.io.StdIn.readLine()).takeWhile(_ != null)
 
-  def core(input: Iterable[String]): Iterable[String] = {
-    val showExtraLines = 9
-    val right = input.take(1).toList
-    val wrongNoTrunc = input.tail.take(showExtraLines + 1).toList
-
-    // Add elided lines in case there are many lines.
-    val wrong = if (wrongNoTrunc.length == (showExtraLines + 1)) {
-      wrongNoTrunc.take(showExtraLines) :+ "⋯ elided lines ⋯"
-    } else { wrongNoTrunc }
-
-    if (right.length != 1) {
-      throw new RuntimeException(
-        s"Lines length is at least '${right.length}' and it should be '1'."
-      )
+      core(stdin)
     }
-    if (wrong.length != 0) {
-      throw new RuntimeException(
-        s"Line count is at least '${right.length + wrong.length}' and it should be '1'. Lines: \n"
-          + (right ++ wrong).mkString("\n")
-      )
-    } else {
-      right
+
+    def core(input: Iterable[String]): Iterable[String] = {
+      val showExtraLines = 9
+      val right = input.take(1).toList
+      val wrongNoTrunc = input.tail.take(showExtraLines + 1).toList
+
+      // Add elided lines in case there are many lines.
+      val wrong = if (wrongNoTrunc.length == (showExtraLines + 1)) {
+        wrongNoTrunc.take(showExtraLines) :+ "⋯ elided lines ⋯"
+      } else { wrongNoTrunc }
+
+      if (right.length != 1) {
+        throw new RuntimeException(
+          s"Lines length is at least '${right.length}' and it should be '1'.",
+        )
+      }
+      if (wrong.length != 0) {
+        throw new RuntimeException(
+          s"Line count is at least '${right.length + wrong.length}' and it should be '1'. Lines: \n"
+            + (right ++ wrong).mkString("\n"),
+        )
+      } else {
+        right
+      }
     }
+
   }
 
-  override def main(args: Array[String]): URIO[ZEnv, ExitCode] = ???
-
-  // override final def main(args: Array[String]): Unit = {
-  //   // What do I want here?
-  //   //
-  //   // 1. The exit code from zio.
-  //   // 2. The automatic parsing of the conf file.
-  //   // 3. The executing logic of `super[CLIConfigTestableMain].main`.
-  //   ???
-  // }
-
-  object innerZIO extends zio.App {
-    def run(args: List[String]): URIO[ZEnv, ExitCode] = ???
-  }
+  def run(args: List[String]): URIO[ZEnv, ExitCode] = ???
 
 }
 
