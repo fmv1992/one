@@ -13,4 +13,7 @@ test -d ./.git
 diff <(echo 'sample line' | ./one/target/one) \
     <(echo 'sample line')
 
+# Also test an infinite sequence.
+# ???
+
 # vim: set filetype=sh fileformat=unix nowrap:

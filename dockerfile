@@ -17,7 +17,7 @@ ENV PATH $JAVA_HOME/bin:$PATH
 # Install support programs.
 RUN apt-get install --yes git make wget zip
 # Install Scala Native dependencies.
-RUN apt-get install --yes clang libgc-dev
+RUN apt-get install --yes clang libgc-dev libuv-dev
 
 # Cleanup installation.
 RUN rm -rf /var/lib/apt/lists/*
@@ -43,15 +43,8 @@ COPY . .
 RUN find ${PROJECT_NAME} -type d -print0 | xargs -0 rmdir --parents || true
 # RUN find . | sort -u && exit 1
 RUN make nativelink
-# ```
-# [error] /usr/bin/ld: cannot find -luv
-# [error] clang: error: linker command failed with exit code 1 (use -v to see invocation)
-# [info] Linking native code (immix gc, none lto) (54 ms)
-# [info] Total (8076 ms)
-# ```
 # RUN find . | sort -u && exit 1
-# RUN make test
-# RUN make clean
+RUN make test
 
 CMD bash
 ENTRYPOINT bash

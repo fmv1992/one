@@ -20,6 +20,8 @@ But this one fails (and it does not print anything) if it reads more than 1 line
 
     Delete this: `one:39d3f40:one/src/main/scala/_delete_me_in_the_future.scala:1` once there's official support.
 
+*   Generalize this program with `--n` with default of `1`.
+
 *   Add Travis CI support.
 
 *   Test `stderr` message.
