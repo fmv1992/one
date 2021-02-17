@@ -26,9 +26,12 @@ object One extends zio.App {
     def testableMain(
         args: Seq[Argument],
     ): Iterable[String] = {
-      // testableMainZIO(args).
-      // https://gitter.im/ZIO/Core?at=60297cc56825b964d60c704b
-      ???
+
+      // Read all stdin lazily.
+      val stdin =
+        Stream.continually(scala.io.StdIn.readLine()).takeWhile(_ != null)
+
+      core(stdin)
     }
 
     def testableMainZIO(
@@ -62,8 +65,31 @@ object One extends zio.App {
       }
     }
 
+    def coreZIO(
+        input: Iterable[String],
+    ): ZIO[Any, Throwable, Iterable[String]] = {
+      ZIO.fromTry(scala.util.Try(core(input)))
+    }
+
   }
 
-  def run(args: List[String]): URIO[ZEnv, ExitCode] = ???
+  def run(args: List[String]): URIO[ZEnv, ExitCode] = {
+    def go(
+        acc: LazyList[String] = LazyList.empty,
+    ): ZIO[zio.Has[zio.console.Console.Service], Throwable, LazyList[
+      String,
+    ]] = {
+      if (acc.length > 1) {
+        val msg = acc.length.toString
+        ZIO.fail(new RuntimeException(msg))
+      } else {
+        (for {
+          input <- zio.console.getStrLn
+          result <- go(input #:: acc)
+        } yield result).orElse(ZIO.succeed(acc))
+      }
+    }
+    go().flatMap(x => zio.console.putStrLn(x.head)).exitCode
+  }
 
 }

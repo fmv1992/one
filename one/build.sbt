@@ -92,6 +92,9 @@ lazy val crossProj: sbtcrossproject.CrossProject =
     .nativeSettings(
       scalaNativeSettings,
     )
+    .settings(
+      testFrameworks += new TestFramework("zio.test.sbt.ZTestFramework"),
+    )
 
 lazy val crossProjectJVM: sbt.Project =
   crossProj.jvm
