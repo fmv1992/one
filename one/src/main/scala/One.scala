@@ -31,7 +31,9 @@ object One extends zio.App {
       val stdin =
         Stream.continually(scala.io.StdIn.readLine()).takeWhile(_ != null)
 
-      core(stdin)
+      zio.Runtime.default.unsafeRun(
+        readStdin().flatMap(x => InnerCLIConfigTestableMain.coreZIO(x)),
+      )
     }
 
     def testableMainZIO(
@@ -41,6 +43,7 @@ object One extends zio.App {
     }
 
     def core(input: Iterable[String]): Iterable[String] = {
+      Console.err.println("core")
       val showExtraLines = 9
       val right = input.take(1).toList
       val wrongNoTrunc = input.tail.take(showExtraLines + 1).toList
@@ -68,24 +71,30 @@ object One extends zio.App {
     def coreZIO(
         input: Iterable[String],
     ): ZIO[Any, Throwable, Iterable[String]] = {
+      Console.err.println("coreZIO")
       ZIO.fromTry(scala.util.Try(core(input)))
     }
 
   }
 
   def readStdin(): zio.ZIO[zio.console.Console, Throwable, LazyList[String]] = {
+    // ???: Not lazy/on demand. It tries to get the entire stdin.
+    Console.err.println("readStdin")
+
     def go(
-        acc: LazyList[String],
+        acc: => LazyList[String],
     ): zio.ZIO[zio.console.Console, Throwable, LazyList[String]] = {
-      zio.console.getStrLn
+      lazy val out = zio.console.getStrLn
         .flatMap(newLine => go(acc.appended(newLine)))
         .orElse(ZIO.succeed(acc))
+      out
     }
     go(LazyList.empty)
   }
 
   def run(args: List[String]): URIO[ZEnv, ExitCode] = {
-    readStdin().map(x => InnerCLIConfigTestableMain.coreZIO(x)).exitCode
+    Console.err.println("run")
+    readStdin().flatMap(x => InnerCLIConfigTestableMain.coreZIO(x)).exitCode
   }
 
 }

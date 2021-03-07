@@ -13,6 +13,9 @@ object TestOneZIO extends zio.test.DefaultRunnableSpec {
           zio.test.Assertion.equalTo(Vector("x", "y", "z")),
         ))
       },
+      testM("`readStdin` feed infinite stdin (assery lazy).") {
+        ???
+      } @@ zio.test.TestAspect.ignore,
     ),
     suite("`core`.")(
       testM("`core` basics 01.") {
@@ -31,9 +34,21 @@ object TestOneZIO extends zio.test.DefaultRunnableSpec {
       },
     ),
     suite("`run`.")(
-      testM("`run` basics 01.") {
+      testM("`run`: failure case.") {
         for {
           _ <- zio.test.environment.TestConsole.feedLines("x", "y", "z")
+          exitCode <- One.run(List.empty)
+          output <- zio.test.environment.TestConsole.output
+        } yield (zio.test.assert(output)(
+          zio.test.Assertion.equalTo(Vector.empty),
+        ) &&
+          zio.test.assert(exitCode.code)(
+            zio.test.Assertion.not(zio.test.Assertion.equalTo(0)),
+          ))
+      },
+      testM("`run`: success case.") {
+        for {
+          _ <- zio.test.environment.TestConsole.feedLines("x")
           exitCode <- One.run(List.empty)
           output <- zio.test.environment.TestConsole.output
         } yield (zio.test.assert(output)(

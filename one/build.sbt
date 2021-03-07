@@ -70,7 +70,7 @@ lazy val scalaNativeSettings = Seq(
   nativeLinkStubs := true,
   nativeLinkStubs in runMain := true,
   nativeLinkStubs in Test := true,
-  Test / nativeLinkStubs := true,
+  test in nativeLink := false,
   sources in (Compile, doc) := Seq.empty,
   artifactPath in (Compile, nativeLink) := {
     file("target/one")
