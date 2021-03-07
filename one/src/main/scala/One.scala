@@ -73,21 +73,15 @@ object One extends zio.App {
 
   }
 
-  def run(args: List[String]): URIO[ZEnv, ExitCode] = {
+  def readStdin(): zio.ZIO[zio.console.Console, Throwable, LazyList[String]] = {
     def go(
-        acc: LazyList[String] = LazyList.empty,
-    ): ZIO[zio.Has[zio.console.Console.Service], Throwable, LazyList[
-      String,
-    ]] = {
-      if (acc.length > 1) {
-        val msg = acc.length.toString
-        ZIO.fail(new RuntimeException(msg))
-      } else {
-        (for {
-          input <- zio.console.getStrLn
-          result <- go(input #:: acc)
-        } yield result).orElse(ZIO.succeed(acc))
-      }
+        acc: LazyList[String],
+    ): zio.ZIO[zio.console.Console, Throwable, LazyList[String]] = {
+      // zio.console.getStrLn.map(x => go(x #:: acc)).orElse(ZIO.succeed(acc))
+      Console.err.println(acc.toList)
+      zio.console.getStrLn
+        .flatMap(newLine => go(acc.appended(newLine)))
+        .orElse(ZIO.succeed(acc))
     }
     go().flatMap(x => zio.console.putStrLn(x.head)).exitCode
   }
