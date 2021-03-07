@@ -77,13 +77,15 @@ object One extends zio.App {
     def go(
         acc: LazyList[String],
     ): zio.ZIO[zio.console.Console, Throwable, LazyList[String]] = {
-      // zio.console.getStrLn.map(x => go(x #:: acc)).orElse(ZIO.succeed(acc))
-      Console.err.println(acc.toList)
       zio.console.getStrLn
         .flatMap(newLine => go(acc.appended(newLine)))
         .orElse(ZIO.succeed(acc))
     }
-    go().flatMap(x => zio.console.putStrLn(x.head)).exitCode
+    go(LazyList.empty)
+  }
+
+  def run(args: List[String]): URIO[ZEnv, ExitCode] = {
+    readStdin().map(x => InnerCLIConfigTestableMain.coreZIO(x)).exitCode
   }
 
 }
