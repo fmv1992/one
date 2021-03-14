@@ -84,6 +84,7 @@ object One extends zio.App {
       .takeWhile(_.isDefined)
       .map(_.getOrElse(throw new Exception()))
       .fold(LazyList.empty: LazyList[String])((l, s) => {
+        // The code currently gets stuck here.
         l.appended(s)
       })
       .flatMap(l => {
