@@ -20,7 +20,7 @@ object One extends zio.App {
     @inline override final val CLIConfigContents: String =
       S.putfile("src/main/resources/cli_config.conf")
     val programName: String = "one"
-    val version: String = "0.0.1"
+    val version: String = "0.1.0"
 
     // Members declared in fmv1992.scala_cli_parser.TestableMain
     def testableMain(
