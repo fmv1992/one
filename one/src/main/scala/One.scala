@@ -83,18 +83,15 @@ object One extends zio.App {
       .repeatEffect(zio.console.getStrLn.option)
       .takeWhile(_.isDefined)
       .map(_.getOrElse(throw new Exception()))
-      .fold(LazyList.empty: LazyList[String])((l, s) => {
-        // The code currently gets stuck here.
-        l.appended(s)
+      .toIterator
+      .use(ie => {
+        InnerCLIConfigTestableMain
+          .coreZIO(
+            ie.map(_.getOrElse(throw new Exception())).iterator.to(LazyList),
+          )
       })
-      .flatMap(l => {
-        InnerCLIConfigTestableMain.coreZIO(l)
-      })
+      .run
       .exitCode
-    // .repeatEffect(zio.console.getStrLn)
-    // .flatMap(x => InnerCLIConfigTestableMain.coreZIO(x))
-    // .exitCode
-    // throw new Exception()
   }
 
 }
