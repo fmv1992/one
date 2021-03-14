@@ -90,7 +90,6 @@ object One extends zio.App {
             ie.map(_.getOrElse(throw new Exception())).iterator.to(LazyList),
           )
       })
-      .run
       .exitCode
   }
 
