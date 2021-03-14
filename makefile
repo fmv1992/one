@@ -42,7 +42,7 @@ host_test_sbt:
 	cd ./$(PROJECT_NAME) \
         && sbt '+ test'
 
-host_test_bash:
+host_test_bash: $(SCALA_NATIVE_BINARY)
 	bash -xv ./other/test/bash/test.sh
 
 nativelink: $(SCALA_NATIVE_BINARY)

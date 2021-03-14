@@ -14,6 +14,6 @@ diff <(echo 'sample line' | ./one/target/one) \
     <(echo 'sample line')
 
 # Also test an infinite sequence.
-# ???
+! { env --unset _JAVA_OPTIONS make nativelink && cd ./one && timeout 3s yes a | ./target/one ; }
 
 # vim: set filetype=sh fileformat=unix nowrap:

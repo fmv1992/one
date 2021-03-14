@@ -82,14 +82,25 @@ object One extends zio.App {
     zio.stream.ZStream
       .repeatEffect(zio.console.getStrLn.option)
       .takeWhile(_.isDefined)
-      .map(_.getOrElse(throw new Exception()))
+      .map(
+        _.getOrElse(throw new Exception("This exception should never happen.")),
+      )
       .toIterator
       .use(ie => {
         InnerCLIConfigTestableMain
           .coreZIO(
-            ie.map(_.getOrElse(throw new Exception())).iterator.to(LazyList),
+            ie.map(
+              _.getOrElse(
+                throw new Exception("This exception should never happen."),
+              ),
+            ).to(LazyList),
           )
       })
+      .flatMap(l =>
+        l.foldLeft(URIO.succeed(()): zio.URIO[zio.console.Console, Unit])(
+          (z, line) => z.zipLeft(zio.console.putStrLn(line)),
+        ),
+      )
       .exitCode
   }
 

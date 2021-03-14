@@ -52,7 +52,7 @@ object TestOneZIO extends zio.test.DefaultRunnableSpec {
           exitCode <- One.run(List.empty)
           output <- zio.test.environment.TestConsole.output
         } yield (zio.test.assert(output)(
-          zio.test.Assertion.equalTo(Vector.empty),
+          zio.test.Assertion.equalTo(Vector("x" + "\n")),
         ) &&
           zio.test.assert(exitCode.code)(zio.test.Assertion.equalTo(0)))
       },
