@@ -32,7 +32,10 @@ object One extends zio.App {
         Stream.continually(scala.io.StdIn.readLine()).takeWhile(_ != null)
 
       zio.Runtime.default.unsafeRun(
-        readStdin().flatMap(x => InnerCLIConfigTestableMain.coreZIO(x)),
+        zio.stream.ZStream
+          .repeatEffect(zio.console.getStrLn)
+          .fold(LazyList.empty: LazyList[String])((l, s) => l.appended(s))
+          .flatMap(l => InnerCLIConfigTestableMain.coreZIO(l)),
       )
     }
 
@@ -43,7 +46,6 @@ object One extends zio.App {
     }
 
     def core(input: Iterable[String]): Iterable[String] = {
-      Console.err.println("core")
       val showExtraLines = 9
       val right = input.take(1).toList
       val wrongNoTrunc = input.tail.take(showExtraLines + 1).toList
@@ -71,30 +73,27 @@ object One extends zio.App {
     def coreZIO(
         input: Iterable[String],
     ): ZIO[Any, Throwable, Iterable[String]] = {
-      Console.err.println("coreZIO")
       ZIO.fromTry(scala.util.Try(core(input)))
     }
 
   }
 
-  def readStdin(): zio.ZIO[zio.console.Console, Throwable, LazyList[String]] = {
-    // ???: Not lazy/on demand. It tries to get the entire stdin.
-    Console.err.println("readStdin")
-
-    def go(
-        acc: => LazyList[String],
-    ): zio.ZIO[zio.console.Console, Throwable, LazyList[String]] = {
-      lazy val out = zio.console.getStrLn
-        .flatMap(newLine => go(acc.appended(newLine)))
-        .orElse(ZIO.succeed(acc))
-      out
-    }
-    go(LazyList.empty)
-  }
-
   def run(args: List[String]): URIO[ZEnv, ExitCode] = {
-    Console.err.println("run")
-    readStdin().flatMap(x => InnerCLIConfigTestableMain.coreZIO(x)).exitCode
+    zio.stream.ZStream
+      .repeatEffect(zio.console.getStrLn.option)
+      .takeWhile(_.isDefined)
+      .map(_.getOrElse(throw new Exception()))
+      .fold(LazyList.empty: LazyList[String])((l, s) => {
+        l.appended(s)
+      })
+      .flatMap(l => {
+        InnerCLIConfigTestableMain.coreZIO(l)
+      })
+      .exitCode
+    // .repeatEffect(zio.console.getStrLn)
+    // .flatMap(x => InnerCLIConfigTestableMain.coreZIO(x))
+    // .exitCode
+    // throw new Exception()
   }
 
 }

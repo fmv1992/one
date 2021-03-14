@@ -53,6 +53,7 @@ lazy val commonDependencies = Seq(
           "org.scalatest" %%% "scalatest" % "3.2.4-M1" % Test,
           "io.github.fmv1992" %%% "scala_cli_parser" % "0.2.0",
           "dev.zio" %%% "zio" % zioVersion,
+          "dev.zio" %%% "zio-streams" % zioVersion,
           "dev.zio" %%% "zio-test" % zioVersion % "test",
           "dev.zio" %% "zio-test-sbt" % zioVersion % "test",
         )
