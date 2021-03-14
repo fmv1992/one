@@ -52,9 +52,21 @@ lazy val commonDependencies = Seq(
           "com.sandinh" %% "scala-rewrites" % "0.1.10-sd",
           "org.scalatest" %%% "scalatest" % "3.2.4-M1" % Test,
           "io.github.fmv1992" %%% "scala_cli_parser" % "0.2.0",
-          "dev.zio" %%% "zio" % zioVersion,
-          "dev.zio" %%% "zio-streams" % zioVersion,
-          "dev.zio" %%% "zio-test" % zioVersion % "test",
+        )
+      case _ => Nil
+    }
+  },
+  mainClass in Compile := Some("fmv1992.one.One"),
+)
+
+lazy val JVMDependencies = Seq(
+  libraryDependencies ++= {
+    CrossVersion.partialVersion(scalaVersion.value) match {
+      case Some((2, n)) if n == 13 =>
+        List(
+          "dev.zio" %% "zio" % zioVersion,
+          "dev.zio" %% "zio-streams" % zioVersion,
+          "dev.zio" %% "zio-test" % zioVersion % "test",
           "dev.zio" %% "zio-test-sbt" % zioVersion % "test",
         )
       case _ => Nil
@@ -80,7 +92,7 @@ lazy val scalaNativeSettings = Seq(
 
 lazy val crossProj: sbtcrossproject.CrossProject =
   crossProject(JVMPlatform, NativePlatform)
-    .crossType(CrossType.Pure)
+    .crossType(CrossType.Full)
     .in(file("."))
     .settings(
       name := "one",
@@ -89,12 +101,11 @@ lazy val crossProj: sbtcrossproject.CrossProject =
     .jvmSettings(
       crossScalaVersions := versionsJVM,
       mainClass in assembly := Some("fmv1992.one.One"),
+      JVMDependencies,
+      testFrameworks += new TestFramework("zio.test.sbt.ZTestFramework"),
     )
     .nativeSettings(
       scalaNativeSettings,
-    )
-    .settings(
-      testFrameworks += new TestFramework("zio.test.sbt.ZTestFramework"),
     )
 
 lazy val crossProjectJVM: sbt.Project =
@@ -106,7 +117,7 @@ lazy val crossProjectNative: sbt.Project =
 lazy val root: sbt.Project = (project in file("."))
   .settings(
     publish / skip := true,
-    compile / skip := true,
+    /* compile / skip := true,*/
     test / skip := true,
     doc / aggregate := false,
     crossScalaVersions := Nil,

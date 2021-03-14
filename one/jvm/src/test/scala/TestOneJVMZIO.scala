@@ -2,13 +2,13 @@ package fmv1992.one
 
 import zio.ZIO
 
-object TestOneZIO extends zio.test.DefaultRunnableSpec {
+object TestOneJVMZIO extends zio.test.DefaultRunnableSpec {
   def spec = suite("TestOneZIO")(
     // suite("`readStdin`.")(
     //   testM("`readStdin` basics 01.") {
     //     for {
     //       _ <- zio.test.environment.TestConsole.feedLines("x", "y", "z")
-    //       input <- One.readStdin()
+    //       input <- OneJVM.readStdin()
     //     } yield (zio.test.assert(input.toVector)(
     //       zio.test.Assertion.equalTo(Vector("x", "y", "z")),
     //     ))
@@ -19,13 +19,13 @@ object TestOneZIO extends zio.test.DefaultRunnableSpec {
     // ),
     suite("`core`.")(
       testM("`core` basics 01.") {
-        zio.test.assertM(One.InnerCLIConfigTestableMain.coreZIO(List("x")))(
+        zio.test.assertM(OneJVM.InnerCLIConfigTestableMain.coreZIO(List("x")))(
           zio.test.Assertion.equalTo(List("x")),
         )
       },
       testM("`core` basics 02.") {
         for {
-          exit <- One.InnerCLIConfigTestableMain.coreZIO(List("x", "y")).run
+          exit <- OneJVM.InnerCLIConfigTestableMain.coreZIO(List("x", "y")).run
         } yield zio.test.assert(
           exit,
         )(
@@ -37,7 +37,7 @@ object TestOneZIO extends zio.test.DefaultRunnableSpec {
       testM("`run`: failure case.") {
         for {
           _ <- zio.test.environment.TestConsole.feedLines("x", "y", "z")
-          exitCode <- One.run(List.empty)
+          exitCode <- OneJVM.run(List.empty)
           output <- zio.test.environment.TestConsole.output
         } yield (zio.test.assert(output)(
           zio.test.Assertion.equalTo(Vector.empty),
@@ -49,7 +49,7 @@ object TestOneZIO extends zio.test.DefaultRunnableSpec {
       testM("`run`: success case.") {
         for {
           _ <- zio.test.environment.TestConsole.feedLines("x")
-          exitCode <- One.run(List.empty)
+          exitCode <- OneJVM.run(List.empty)
           output <- zio.test.environment.TestConsole.output
         } yield (zio.test.assert(output)(
           zio.test.Assertion.equalTo(Vector("x" + "\n")),
