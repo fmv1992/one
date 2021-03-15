@@ -56,7 +56,7 @@ lazy val commonDependencies = Seq(
       case _ => Nil
     }
   },
-  mainClass in Compile := Some("fmv1992.one.One"),
+  mainClass in Compile := Some("fmv1992.one.OneImpl"),
 )
 
 lazy val JVMDependencies = Seq(
