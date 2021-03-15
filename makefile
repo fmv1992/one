@@ -15,7 +15,7 @@ SCALA_NATIVE_BINARY := ./one/target/one
 
 export _JAVA_OPTIONS ?= -Xms2048m -Xmx4096m
 
-all: $(SCALA_NATIVE_BINARY) test format clean
+all: $(SCALA_NATIVE_BINARY) assembly test format clean
 
 format:
 	scalafmt --config ./$(PROJECT_NAME)/.scalafmt.conf $(SCALA_FILES) $(SBT_FILES)
@@ -46,6 +46,10 @@ host_test_bash: $(SCALA_NATIVE_BINARY)
 	bash -xv ./other/test/bash/test.sh
 
 nativelink: $(SCALA_NATIVE_BINARY)
+
+assembly: $(SCALA_FILES) $(SBT_FILES)
+	cd ./$(PROJECT_NAME) \
+        && sbt '+ assembly'
 
 $(SCALA_NATIVE_BINARY): $(SCALA_FILES) $(SBT_FILES)
 	cd ./$(PROJECT_NAME) \

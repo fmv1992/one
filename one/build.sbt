@@ -99,6 +99,8 @@ lazy val crossProj: sbtcrossproject.CrossProject =
     )
     .settings(commonSettingsAndDependencies)
     .jvmSettings(
+      // ???: remove tests in assembly.
+      // ???: fix `make assembly`.
       crossScalaVersions := versionsJVM,
       mainClass in assembly := Some("fmv1992.one.One"),
       JVMDependencies,
