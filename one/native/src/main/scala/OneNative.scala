@@ -10,7 +10,7 @@ import fmv1992.fmv1992_scala_utilities.util.S
   *  `zio` could be used together with Scala Native as in the `v0.1.x` series
   *  but then the output binary becomes big (~12 Mb).
   */
-object OneNative extends CLIConfigTestableMain {
+object OneImpl extends CLIConfigTestableMain with One {
 
   @inline override final val CLIConfigContents: String =
     S.putfile("shared/src/main/resources/cli_config.conf")

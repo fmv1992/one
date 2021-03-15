@@ -13,7 +13,7 @@ import zio._
 // ```
 // object One extends App with CLIConfigTestableMain {
 // ```
-object OneJVM extends zio.App with One {
+object OneImpl extends zio.App with One {
 
   object InnerCLIConfigTestableMain extends CLIConfigTestableMain {
 

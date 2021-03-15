@@ -8,7 +8,7 @@ object TestOneJVMZIO extends zio.test.DefaultRunnableSpec {
     //   testM("`readStdin` basics 01.") {
     //     for {
     //       _ <- zio.test.environment.TestConsole.feedLines("x", "y", "z")
-    //       input <- OneJVM.readStdin()
+    //       input <- OneImpl.readStdin()
     //     } yield (zio.test.assert(input.toVector)(
     //       zio.test.Assertion.equalTo(Vector("x", "y", "z")),
     //     ))
@@ -19,13 +19,13 @@ object TestOneJVMZIO extends zio.test.DefaultRunnableSpec {
     // ),
     suite("`core`.")(
       testM("`core` basics 01.") {
-        zio.test.assertM(OneJVM.InnerCLIConfigTestableMain.coreZIO(List("x")))(
+        zio.test.assertM(OneImpl.InnerCLIConfigTestableMain.coreZIO(List("x")))(
           zio.test.Assertion.equalTo(List("x")),
         )
       },
       testM("`core` basics 02.") {
         for {
-          exit <- OneJVM.InnerCLIConfigTestableMain.coreZIO(List("x", "y")).run
+          exit <- OneImpl.InnerCLIConfigTestableMain.coreZIO(List("x", "y")).run
         } yield zio.test.assert(
           exit,
         )(
@@ -37,7 +37,7 @@ object TestOneJVMZIO extends zio.test.DefaultRunnableSpec {
       testM("`run`: failure case.") {
         for {
           _ <- zio.test.environment.TestConsole.feedLines("x", "y", "z")
-          exitCode <- OneJVM.run(List.empty)
+          exitCode <- OneImpl.run(List.empty)
           output <- zio.test.environment.TestConsole.output
         } yield (zio.test.assert(output)(
           zio.test.Assertion.equalTo(Vector.empty),
@@ -49,7 +49,7 @@ object TestOneJVMZIO extends zio.test.DefaultRunnableSpec {
       testM("`run`: success case.") {
         for {
           _ <- zio.test.environment.TestConsole.feedLines("x")
-          exitCode <- OneJVM.run(List.empty)
+          exitCode <- OneImpl.run(List.empty)
           output <- zio.test.environment.TestConsole.output
         } yield (zio.test.assert(output)(
           zio.test.Assertion.equalTo(Vector("x" + "\n")),
