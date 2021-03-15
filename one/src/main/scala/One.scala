@@ -11,7 +11,7 @@ object One extends CLIConfigTestableMain {
   @inline override final val CLIConfigContents: String =
     S.putfile("src/main/resources/cli_config.conf")
   val programName: String = "one"
-  val version: String = "0.0.1"
+  val version: String = "0.0.3"
 
   // Members declared in fmv1992.scala_cli_parser.TestableMain
   def testableMain(
