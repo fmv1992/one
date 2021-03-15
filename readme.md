@@ -16,6 +16,8 @@ But this one fails (and it does not print anything) if it reads more than 1 line
 
 ## TODO
 
+*   Fix `make assembly`: `one:9bf4ef9:one/build.sbt:103`.
+
 *   Take this into account <https://gitter.im/ZIO/Core?at=601c19bb9fa6765ef8f9ee11>.
 
     Delete this: `one:39d3f40:one/src/main/scala/_delete_me_in_the_future.scala:1` once there's official support.
