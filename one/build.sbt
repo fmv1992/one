@@ -19,27 +19,21 @@ inThisBuild(
     semanticdbEnabled := true,
     semanticdbOptions += "-P:semanticdb:synthetics:on", // make sure to add this
     semanticdbVersion := scalafixSemanticdb.revision,
-    libraryDependencies += "org.scalameta" % "semanticdb-scalac-core" % "4.4.6" cross CrossVersion.full,
     scalafixScalaBinaryVersion := CrossVersion.binaryScalaVersion(
       scalaVersion.value,
     ),
   ),
+  // This should include this change:
+  // ???: `git diff 9e27b70e9ccf2a9cfc6d2fb5dace9e04c62f41bd..cc67d0040b4684b4dcb454fd63da4084ef00e587`
 )
 
 lazy val commonSettings = Seq(
   Compile / scalacOptions ++= {
     CrossVersion.partialVersion(scalaVersion.value) match {
-      case Some((2, n)) if n == 11 => Seq()
-      case Some((2, n)) if n == 12 => Seq("-Xlint:unused")
-      case Some((2, n)) if n == 13 =>
-        Seq(
-          "-deprecation",
-          "-feature",
-          "-P:semanticdb:synthetics:on",
-          "-Wunused",
-          "-Yrangepos",
-          "-Ywarn-dead-code",
-        )
+      // ???: -Ywarn-unused-import, -Xlint:unused
+      case Some((2, n)) if n == 11 => List("-Ywarn-unused-import")
+      case Some((2, n)) if n == 12 => List("-Ywarn-unused")
+      case Some((2, n)) if n == 13 => List("-Ywarn-unused")
     }
   },
 )
@@ -49,7 +43,7 @@ lazy val commonDependencies = Seq(
     CrossVersion.partialVersion(scalaVersion.value) match {
       case Some((2, n)) if n == 13 =>
         List(
-          "com.sandinh" %% "scala-rewrites" % "0.1.10-sd",
+          "org.scala-lang" %% "scala-rewrites" % "0.1.3",
           "org.scalatest" %%% "scalatest" % "3.2.4-M1" % Test,
           "io.github.fmv1992" %%% "scala_cli_parser" % "0.2.0",
           "dev.zio" %%% "zio" % zioVersion,
