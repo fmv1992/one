@@ -36,6 +36,10 @@ lazy val commonSettings = Seq(
       case Some((2, n)) if n == 13 => List("-Ywarn-unused")
     }
   },
+  assemblyMergeStrategy in assembly := {
+  case PathList("META-INF", xs @ _*) => MergeStrategy.discard
+  case x => MergeStrategy.first
+  },
 )
 
 lazy val commonDependencies = Seq(
@@ -70,6 +74,7 @@ lazy val scalaNativeSettings = Seq(
   artifactPath in (Compile, nativeLink) := {
     file("target/one")
   },
+mainClass in Compile := Some("fmv1992.one.OneImpl")
 )
 
 lazy val crossProj: sbtcrossproject.CrossProject =
@@ -82,7 +87,7 @@ lazy val crossProj: sbtcrossproject.CrossProject =
     .settings(commonSettingsAndDependencies)
     .jvmSettings(
       crossScalaVersions := versionsJVM,
-      mainClass in assembly := Some("fmv1992.one.One"),
+      mainClass in assembly := Some("fmv1992.one.OneImpl"),
     )
     .nativeSettings(
       scalaNativeSettings,
