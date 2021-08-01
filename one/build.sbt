@@ -6,7 +6,7 @@ nativeLinkStubs in runMain := true
 Test / nativeLinkStubs := true
 
 libraryDependencies += "org.scalatest" %%% "scalatest" % "3.1.0" % Test
-libraryDependencies += "io.github.fmv1992" %%% "scala_cli_parser" % "[0.0,9.0]"
+libraryDependencies += "io.github.fmv1992" %%% "scala_cli_parser" % "0.1.4"
 Global / onChangedBuildSource := ReloadOnSourceChanges
 
 artifactPath in (Compile, nativeLink) := {
