@@ -29,31 +29,26 @@ trait One extends MainTestableConfBased {
   val version: String = "v0.2.0-dev"
 
   def testableMain(args: Set[ArgumentCLI]): Iterable[String] = {
-    if (!args.isEmpty) {
-      throw new RuntimeException(
-        s"`one` does not take any args at this point. Got '${args}'.",
-      )
-    } else {
-      core(getInput())
-    }
+    val n = args.find(_.name == "n").get.values(0).toInt
+    core(getInput(), n)
   }
 
-  def core(input: Iterable[String]): Iterable[String] = {
+  def core(input: Iterable[String], nInput: Int): Iterable[String] = {
     val showExtraLines = 9
-    val right = input.take(1).toList
-    val wrongNoTrunc = input.tail.take(showExtraLines + 1).toList
-    val wrong = if (wrongNoTrunc.length == (showExtraLines + 1)) {
+    val right = input.take(nInput).toList
+    val wrongNoTrunc = input.drop(nInput).take(showExtraLines + nInput).toList
+    val wrong = if (wrongNoTrunc.length == (showExtraLines + nInput)) {
       wrongNoTrunc.take(showExtraLines) :+ "⋯ ellided lines ⋯"
     } else { wrongNoTrunc }
 
-    if (right.length != 1) {
+    if (right.length != nInput) {
       throw new RuntimeException(
-        s"Lines length is at least '${right.length}' and it should be '1'.",
+        s"Lines length is at least '${right.length}' and it should be '${nInput}'.",
       )
     }
     if (wrong.length != 0) {
       throw new RuntimeException(
-        s"Line count is at least '${right.length + wrong.length}' and it should be one. Lines: \n"
+        s"Line count is at least '${right.length + wrong.length}' and it should be '${nInput}'. Lines: \n"
           + (right ++ wrong).mkString("\n"),
       )
     } else {

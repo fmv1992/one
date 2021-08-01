@@ -7,6 +7,7 @@ export PROJECT_NAME ?= $(notdir $(ROOT_DIR))
 # Find all scala files.
 SBT_FILES := $(shell find $(PROJECT_NAME) -iname 'build.sbt')
 SCALA_FILES := $(shell find $(PROJECT_NAME) -iname '*.scala')
+CONF_FILES := $(shell find $(PROJECT_NAME) -iname '*.conf')
 
 SBT_VERSION := $(shell grep --fixed-strings 'sbt.version' -- $(PROJECT_NAME)/project/build.properties | sed -E 's/.*=//g')
 SCALA_VERSION := 2.13.4
@@ -47,7 +48,7 @@ host_test_bash: $(SCALA_NATIVE_BINARY)
 
 nativelink: $(SCALA_NATIVE_BINARY)
 
-$(SCALA_NATIVE_BINARY): $(SCALA_FILES) $(SBT_FILES)
+$(SCALA_NATIVE_BINARY): $(CONF_FILES) $(SCALA_FILES) $(SBT_FILES)
 	cd ./$(PROJECT_NAME) \
         && sbt nativeLink
 
