@@ -56,7 +56,7 @@ sbt:
 
 # Docker actions. --- {{{
 
-docker_build:
+docker_build: scala_cli_parser
 	docker build \
         --file ./dockerfile \
         --tag $(PROJECT_NAME) \
@@ -79,6 +79,13 @@ docker_test:
 	DOCKER_CMD='make host_test' make docker_run
 
 # --- }}}
+
+scala_cli_parser: tmp/scala_cli_parser/makefile
+
+tmp/scala_cli_parser/makefile: .FORCE
+	rm -rf $(dir $@)
+	cp -rf $(shell get_project_path scala_cli_parser) $(dir $@)
+	cd $(dir $@) && env --ignore-environment -- bash -l -c "make clean"
 
 .FORCE:
 

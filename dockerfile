@@ -35,20 +35,23 @@ RUN unzip sbt.zip
 RUN rm sbt.zip
 ENV PATH $PATH:/home/user/bin/sbt/bin
 
+# Install dependencies.
+COPY ./tmp/scala_cli_parser /tmp/scala_cli_parser
+RUN cd /tmp/scala_cli_parser && make publishlocal
+RUN rm -rf /tmp/scala_cli_parser
+
 WORKDIR /home/user/
 RUN mkdir ./${PROJECT_NAME}
 COPY ./${PROJECT_NAME} ./${PROJECT_NAME}
 # ???
 RUN find ${PROJECT_NAME} -regextype 'egrep' \( \! -iregex '.*(\.properties|\.sbt|/version)' \) -type f -print0 | xargs -0 rm --verbose -rf
 RUN find ${PROJECT_NAME} -type d -print0 | xargs -0 rmdir --parents || true
-# RUN find . | sort -u && exit 1
 RUN cd ./${PROJECT_NAME} && sbt "++${scalaVersion};set scalaVersion := \"${scala_version}\";update"
 RUN rm -rf ./${PROJECT_NAME}
 COPY . .
 RUN find ${PROJECT_NAME} -type d -print0 | xargs -0 rmdir --parents || true
-# RUN find . | sort -u && exit 1
+
 RUN make nativelink
-# RUN find . | sort -u && exit 1
 RUN make test
 
 CMD bash

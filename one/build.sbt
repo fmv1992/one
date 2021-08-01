@@ -28,6 +28,7 @@ inThisBuild(
 )
 
 lazy val commonSettings = Seq(
+  resolvers += Resolver.mavenLocal,
   Compile / scalacOptions ++= {
     CrossVersion.partialVersion(scalaVersion.value) match {
       // ???: -Ywarn-unused-import, -Xlint:unused
@@ -37,8 +38,8 @@ lazy val commonSettings = Seq(
     }
   },
   assemblyMergeStrategy in assembly := {
-  case PathList("META-INF", xs @ _*) => MergeStrategy.discard
-  case x => MergeStrategy.first
+    case PathList("META-INF", xs @ _*) => MergeStrategy.discard
+    case x                             => MergeStrategy.first
   },
 )
 
@@ -74,7 +75,7 @@ lazy val scalaNativeSettings = Seq(
   artifactPath in (Compile, nativeLink) := {
     file("target/one")
   },
-mainClass in Compile := Some("fmv1992.one.OneImpl")
+  mainClass in Compile := Some("fmv1992.one.OneImpl"),
 )
 
 lazy val crossProj: sbtcrossproject.CrossProject =
