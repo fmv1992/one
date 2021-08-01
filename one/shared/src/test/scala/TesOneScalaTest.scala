@@ -1,16 +1,23 @@
 package fmv1992.one
 
-class TestOneScalatest extends org.scalatest.funsuite.AnyFunSuite {
-  test("Easiest test.") {
+import fmv1992.scala_cli_parser.cli.ArgumentCLI
+
+class TestOne extends org.scalatest.funsuite.AnyFunSuite {
+  test("Test `core`.") {
     val invalidInput01 = 0 to 10 map (_.toString)
     assertThrows[RuntimeException] {
-      One.InnerCLIConfigTestableMain.core(invalidInput01)
+      OneImpl.core(invalidInput01)
     }
     val invalidInput02 = Iterable()
     assertThrows[RuntimeException] {
-      One.InnerCLIConfigTestableMain.core(invalidInput02)
+      OneImpl.core(invalidInput02)
     }
     def validInput = Iterable("single line")
-    assert(validInput === One.InnerCLIConfigTestableMain.core(validInput))
+    assert(validInput === OneImpl.core(validInput))
+  }
+
+  // We should not execute this test because it relies on stdin.
+  ignore("Test `testableMain`.") {
+    OneImpl.testableMain(Set.empty: Set[ArgumentCLI])
   }
 }
