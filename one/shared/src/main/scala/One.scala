@@ -18,7 +18,7 @@ object One extends zio.App {
   object InnerCLIConfigTestableMain extends CLIConfigTestableMain {
 
     @inline override final val CLIConfigContents: String =
-      S.putfile("src/main/resources/cli_config.conf")
+      S.putfile("shared/src/main/resources/cli_config.conf")
     val programName: String = "one"
     val version: String = "0.1.0"
 

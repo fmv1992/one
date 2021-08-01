@@ -51,6 +51,9 @@ $(SCALA_NATIVE_BINARY): $(SCALA_FILES) $(SBT_FILES)
 	cd ./$(PROJECT_NAME) \
         && sbt nativeLink
 
+sbt:
+	cd ./$(PROJECT_NAME) && sbt
+
 # Docker actions. --- {{{
 
 docker_build:

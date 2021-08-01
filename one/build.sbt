@@ -74,7 +74,7 @@ lazy val scalaNativeSettings = Seq(
 
 lazy val crossProj: sbtcrossproject.CrossProject =
   crossProject(JVMPlatform, NativePlatform)
-    .crossType(CrossType.Pure)
+    .crossType(CrossType.Full)
     .in(file("."))
     .settings(
       name := "one",
