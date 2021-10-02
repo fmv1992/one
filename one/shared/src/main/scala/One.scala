@@ -29,7 +29,15 @@ trait One extends MainTestableConfBased {
   val version: String = "v0.2.0-dev"
 
   def testableMain(args: Set[ArgumentCLI]): Iterable[String] = {
-    val n = args.find(_.name == "n").get.values(0).toInt
+    val n = args
+      .find(_.name == "n")
+      // ???: This should not be necessary after
+      // <https://github.com/fmv1992/scala_cli_parser/blob/4d0e4ab10951b81cec7f2fe8d8c0ce5e08a1308a/documentation/readme.md#L83>.
+      .getOrElse(
+        ArgumentCLI("n", Seq("1")),
+      )
+      .values(0)
+      .toInt
     core(getInput(), n)
   }
 
