@@ -21,6 +21,6 @@ diff <(echo 'sample line' | ./one/target/one) \
 ! printf '' | ./one/target/one --n 0
 ! printf 'non_empty' | ./one/target/one --n 0
 printf '' | ./one/target/one --empty
-!printf 'non_empty' | ./one/target/one --empty
+! printf 'non_empty' | ./one/target/one --empty
 
 # vim: set filetype=sh fileformat=unix nowrap:

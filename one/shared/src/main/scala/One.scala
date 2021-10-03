@@ -29,17 +29,19 @@ trait One extends MainTestableConfBased {
   val version: String = "v0.2.0-dev"
 
   def testableMain(args: Set[ArgumentCLI]): Iterable[String] = {
+    // The order of the argument parsing here matters. `n` is optional, so it
+    // is always set. Thus `empty` has to come before this option.
     args
-      .find(_.name == "n")
-      .map(x => {
-        val nInput = x.values(0).toInt
-        require(nInput > 0)
-        core(getInput(), nInput)
-      })
+      .find(_.name == "empty")
+      .map(_ => { require(getInput.isEmpty); Seq.empty })
       .getOrElse(
         args
-          .find(_.name == "empty")
-          .map(_ => { require(getInput.isEmpty); Seq.empty })
+          .find(_.name == "n")
+          .map(x => {
+            val nInput = x.values(0).toInt
+            require(nInput > 0)
+            core(getInput(), nInput)
+          })
           .get,
       )
 
