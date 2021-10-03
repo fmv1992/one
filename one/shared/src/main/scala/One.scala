@@ -29,38 +29,38 @@ trait One extends MainTestableConfBased {
   val version: String = "v0.2.0-dev"
 
   def testableMain(args: Set[ArgumentCLI]): Iterable[String] = {
-    val n = args
+    args
       .find(_.name == "n")
-      // ???: This should not be necessary after
-      // <https://github.com/fmv1992/scala_cli_parser/blob/4d0e4ab10951b81cec7f2fe8d8c0ce5e08a1308a/documentation/readme.md#L83>.
+      .map(x => {
+        val nInput = x.values(0).toInt
+        require(nInput > 0)
+        core(getInput(), nInput)
+      })
       .getOrElse(
-        ArgumentCLI("n", Seq("1")),
+        args
+          .find(_.name == "empty")
+          .map(_ => { require(getInput.isEmpty); Seq.empty })
+          .get,
       )
-      .values(0)
-      .toInt
-    core(getInput(), n)
+
   }
 
   def core(input: Iterable[String], nInput: Int): Iterable[String] = {
     val showExtraLines = 9
-    val right = input.take(nInput).toList
+
+    val lines = input.take(nInput).toList
     val wrongNoTrunc = input.drop(nInput).take(showExtraLines + nInput).toList
     val wrong = if (wrongNoTrunc.length == (showExtraLines + nInput)) {
       wrongNoTrunc.take(showExtraLines) :+ "⋯ ellided lines ⋯"
     } else { wrongNoTrunc }
 
-    if (right.length != nInput) {
+    if (lines.length != nInput) {
       throw new RuntimeException(
-        s"Lines length is at least '${right.length}' and it should be '${nInput}'.",
-      )
-    }
-    if (wrong.length != 0) {
-      throw new RuntimeException(
-        s"Line count is at least '${right.length + wrong.length}' and it should be '${nInput}'. Lines: \n"
-          + (right ++ wrong).mkString("\n"),
+        s"Line count is at least '${lines.length + wrong.length}' and it should be '${nInput}'. Lines: \n"
+          + (lines ++ wrong).mkString("\n"),
       )
     } else {
-      right
+      lines
     }
   }
 
