@@ -18,6 +18,10 @@ export _JAVA_OPTIONS ?= -Xms2048m -Xmx4096m
 
 all: $(SCALA_NATIVE_BINARY) test format clean
 
+print_target:
+	@test -f $(shell readlink -f $(SCALA_NATIVE_BINARY))
+	@printf $(shell readlink -f $(SCALA_NATIVE_BINARY))
+
 format:
 	scalafmt --config ./$(PROJECT_NAME)/.scalafmt.conf $(SCALA_FILES) $(SBT_FILES)
 	cd ./$(PROJECT_NAME) \
