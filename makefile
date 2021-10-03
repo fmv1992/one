@@ -76,7 +76,7 @@ docker_run:
         $(PROJECT_NAME) \
         $(if $(DOCKER_CMD),$(DOCKER_CMD),bash)
 
-docker_test:
+docker_test: docker_build
 	DOCKER_CMD='make host_test' make docker_run
 
 # --- }}}

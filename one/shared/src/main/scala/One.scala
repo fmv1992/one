@@ -55,14 +55,13 @@ trait One extends MainTestableConfBased {
     val wrong = if (wrongNoTrunc.length == (showExtraLines + nInput)) {
       wrongNoTrunc.take(showExtraLines) :+ "⋯ ellided lines ⋯"
     } else { wrongNoTrunc }
-
-    if (lines.length != nInput) {
+    if (lines.length == nInput && wrong.isEmpty) {
+      lines
+    } else {
       throw new RuntimeException(
         s"Line count is at least '${lines.length + wrong.length}' and it should be '${nInput}'. Lines: \n"
           + (lines ++ wrong).mkString("\n"),
       )
-    } else {
-      lines
     }
   }
 
