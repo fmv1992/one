@@ -14,6 +14,12 @@ diff <(echo 'sample line' | ./one/target/one) \
     <(echo 'sample line')
 
 # Also test an infinite sequence.
-! { env --unset _JAVA_OPTIONS make nativelink && cd ./one && timeout 3s yes a | ./target/one ; }
+! ({ env --unset _JAVA_OPTIONS make nativelink && cd ./one && timeout 3s yes a | ./target/one ; })
+
+# Test that an empty stdin works.
+pwd
+test -f ./one/target/one
+! printf '' | ./one/target/one --n 1
+printf '' | ./one/target/one --n 0
 
 # vim: set filetype=sh fileformat=unix nowrap:
