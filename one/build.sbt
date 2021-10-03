@@ -13,16 +13,16 @@ inThisBuild(
     scalaVersion := scala213,
     scalafixDependencies += "com.github.liancheng" %% "organize-imports" % "0.4.3",
     scalafixScalaBinaryVersion := CrossVersion.binaryScalaVersion(
-      scalaVersion.value,
+      scalaVersion.value
     ),
     // https://index.scala-lang.org/ohze/scala-rewrites/scala-rewrites/0.1.10-sd?target=_2.13
     semanticdbEnabled := true,
     semanticdbOptions += "-P:semanticdb:synthetics:on", // make sure to add this
     semanticdbVersion := scalafixSemanticdb.revision,
     scalafixScalaBinaryVersion := CrossVersion.binaryScalaVersion(
-      scalaVersion.value,
-    ),
-  ),
+      scalaVersion.value
+    )
+  )
   // This should include this change:
   // ???: `git diff 9e27b70e9ccf2a9cfc6d2fb5dace9e04c62f41bd..cc67d0040b4684b4dcb454fd63da4084ef00e587`
 )
@@ -40,7 +40,7 @@ lazy val commonSettings = Seq(
   assemblyMergeStrategy in assembly := {
     case PathList("META-INF", xs @ _*) => MergeStrategy.discard
     case x                             => MergeStrategy.first
-  },
+  }
 )
 
 lazy val commonDependencies = Seq(
@@ -54,12 +54,12 @@ lazy val commonDependencies = Seq(
           "dev.zio" %%% "zio" % zioVersion,
           "dev.zio" %%% "zio-streams" % zioVersion,
           "dev.zio" %%% "zio-test" % zioVersion % "test",
-          "dev.zio" %% "zio-test-sbt" % zioVersion % "test",
+          "dev.zio" %% "zio-test-sbt" % zioVersion % "test"
         )
       case _ => Nil
     }
   },
-  mainClass in Compile := Some("fmv1992.one.One"),
+  mainClass in Compile := Some("fmv1992.one.One")
 )
 
 lazy val commonSettingsAndDependencies = commonSettings ++ commonDependencies
@@ -75,7 +75,7 @@ lazy val scalaNativeSettings = Seq(
   artifactPath in (Compile, nativeLink) := {
     file("target/one")
   },
-  mainClass in Compile := Some("fmv1992.one.OneImpl"),
+  mainClass in Compile := Some("fmv1992.one.OneImpl")
 )
 
 lazy val crossProj: sbtcrossproject.CrossProject =
@@ -83,18 +83,18 @@ lazy val crossProj: sbtcrossproject.CrossProject =
     .crossType(CrossType.Full)
     .in(file("."))
     .settings(
-      name := "one",
+      name := "one"
     )
     .settings(commonSettingsAndDependencies)
     .jvmSettings(
       crossScalaVersions := versionsJVM,
-      mainClass in assembly := Some("fmv1992.one.OneImpl"),
+      mainClass in assembly := Some("fmv1992.one.OneImpl")
     )
     .nativeSettings(
-      scalaNativeSettings,
+      scalaNativeSettings
     )
     .settings(
-      testFrameworks += new TestFramework("zio.test.sbt.ZTestFramework"),
+      testFrameworks += new TestFramework("zio.test.sbt.ZTestFramework")
     )
 
 lazy val crossProjectJVM: sbt.Project =
@@ -110,11 +110,11 @@ lazy val root: sbt.Project = (project in file("."))
     test / skip := true,
     doc / aggregate := false,
     crossScalaVersions := Nil,
-    packageDoc / aggregate := false,
+    packageDoc / aggregate := false
   )
   .aggregate(
     crossProjectJVM,
-    crossProjectNative,
+    crossProjectNative
   )
 
 // <https://github.com/scala-native/scala-native.g8> --- {{{

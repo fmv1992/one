@@ -1,16 +1,16 @@
-/**  How do we implement different implementation to the same interface?
+/** How do we implement different implementation to the same interface?
   *
-  *  Lets use `zio.Fiber` as an example.
+  * Lets use `zio.Fiber` as an example.
   *
-  *  `native` and `jvm` both define a `private[zio] trait
-  *  FiberPlatformSpecific` and `Fiber` resides on `shared`:
+  * `native` and `jvm` both define a `private[zio] trait FiberPlatformSpecific`
+  * and `Fiber` resides on `shared`:
   *
-  *  ```
-  *  object Fiber extends FiberPlatformSpecific {
-  *  ```
+  * ```
+  * object Fiber extends FiberPlatformSpecific {
+  * ```
   *
-  *  See
-  *  <https://github.com/zio/zio/blob/b30d5cf5ffb9fdf33ddeabedc17d9a67cdc73379/core/shared/src/main/scala/zio/Fiber.scala#L389>.
+  * See
+  * <https://github.com/zio/zio/blob/b30d5cf5ffb9fdf33ddeabedc17d9a67cdc73379/core/shared/src/main/scala/zio/Fiber.scala#L389>.
   */
 
 package fmv1992.one
@@ -33,7 +33,7 @@ trait One extends MainTestableConfBased {
     // is always set. Thus `empty` has to come before this option.
     args
       .find(_.name == "empty")
-      .map(_ => { require(getInput.isEmpty); Seq.empty })
+      .map(_ => { require(getInput().isEmpty); Seq.empty })
       .getOrElse(
         args
           .find(_.name == "n")
@@ -42,7 +42,7 @@ trait One extends MainTestableConfBased {
             require(nInput > 0)
             core(getInput(), nInput)
           })
-          .get,
+          .get
       )
 
   }
@@ -60,7 +60,7 @@ trait One extends MainTestableConfBased {
     } else {
       throw new RuntimeException(
         s"Line count is at least '${lines.length + wrong.length}' and it should be '${nInput}'. Lines: \n"
-          + (lines ++ wrong).mkString("\n"),
+          + (lines ++ wrong).mkString("\n")
       )
     }
   }
