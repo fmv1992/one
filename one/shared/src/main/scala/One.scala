@@ -33,7 +33,10 @@ trait One extends MainTestableConfBased {
     // is always set. Thus `empty` has to come before this option.
     args
       .find(_.name == "empty")
-      .map(_ => { require(getInput().isEmpty); Seq.empty })
+      .map(_ =>
+        if (getInput().isEmpty) Seq.empty
+        else throw new RuntimeException("Stdin not empty.")
+      )
       .getOrElse(
         args
           .find(_.name == "n")
