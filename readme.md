@@ -6,6 +6,10 @@ If the stdin has only one line prints it. Otherwise fails.
 
 * * *
 
+This has not seen development for a log time and therefore it is archived (2022-06-11).
+
+* * *
+
 Like unix [coreutils](https://www.gnu.org/software/coreutils/) [head](https://man7.org/linux/man-pages/man1/head.1.html):
 
 ```
