@@ -1,0 +1,22 @@
+services:
+    one:
+        build:
+            args:
+                - BUILD_DATE
+                - GIT_COMMIT
+                - GIT_COMMIT_DATE
+                - IMAGE_NAME
+                - PROJECT
+                - USER_GID
+                - USER_UID
+            context: .
+        stdin_open: true # docker run -i
+        entrypoint: ''
+        tty: true # docker run -t
+#       volumes:
+#           - type: bind
+#             source: ${ROOT_DIR}/one
+#             target: /home/user_one/one
+#             read_only: false
+
+# vim: set filetype=yaml fileformat=unix nowrap spell spelllang=en ts=4 sts=4 sw=4 :

@@ -2,16 +2,17 @@
 *
 
 # But not these files...
+!*.c
 !*.config
 !dockerfile
 !.dockerignore
 !*.erl
 !*.ex
-!*.h
-!*.c
 !.gitignore
 !.gitkeep
+!*.h
 !*.hrl
+!license
 !makefile
 !*.md
 !*.properties
@@ -25,6 +26,9 @@
 !*.src
 # !*.txt
 !*.vim
+!*.yaml
+!.yamlfmt
+!*.yml
 
 # Git files.
 !post-checkout

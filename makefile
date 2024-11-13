@@ -28,7 +28,7 @@ ifndef DOCKER_RUN_CMD
 endif
 
 CC := gcc-13
-CFLAGS += \
+export CFLAGS += \
     -pedantic \
     -std=c2x \
     -Wextra \
@@ -85,7 +85,8 @@ clean:
 # C related. --- {{{
 
 host_compile:
-	$(CC) $(CFLAGS) \
+	$(CC) \
+        $(CFLAGS) \
         -o $(TARGET) \
         ./one/src/one.c
 
@@ -97,10 +98,10 @@ format_c:
 release: host_test clean release_static_linked release_dynamically_linked
 
 release_static_linked:
-	TARGET='./bin/one_static' CFLAGS='-O3 -Bstatic' make host_compile
+	env TARGET='./bin/one_static' CFLAGS='-O3 -static' make host_compile
 
 release_dynamically_linked:
-	TARGET='./bin/one_dynamic' CFLAGS='-O3 -Bdynamic' make host_compile
+	env TARGET='./bin/one_dynamic' CFLAGS='-O3' make host_compile
 
 #  --- }}}
 
