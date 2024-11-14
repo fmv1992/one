@@ -80,6 +80,9 @@ format_json:
 clean:
 	rm ./bin/* || true
 
+install:
+	sudo cp ./bin/one_dynamic /usr/local/bin/one
+
 #  --- }}}
 
 # C related. --- {{{

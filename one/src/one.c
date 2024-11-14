@@ -15,7 +15,7 @@ constexpr int MAX_LINE_LENGTH = 10000;
 
 // Argparse. --- {{{
 
-const char *argp_program_version = "one v0.0.1 " GIT_COMMIT;
+const char *argp_program_version = "one v0.0.2 " GIT_COMMIT;
 
 const char *argp_program_bug_address = "fmv1992@gmail.com";
 
@@ -101,7 +101,6 @@ int one(struct arguments arguments)
 {
     int exit_code = -1;
 
-
     int n_expected_lines = arguments.n_expected_lines;
 
     char line[MAX_LINE_LENGTH];
@@ -181,6 +180,10 @@ int main(int argc, char **argv)
     }
     if (arguments.empty) {
         empty(arguments);
-    } else
+    } else {
+        if (arguments.n_expected_lines == -1) {
+            arguments.n_expected_lines = 1;
+        }
         one(arguments);
+    }
 }
