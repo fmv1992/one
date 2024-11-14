@@ -180,13 +180,10 @@ int main(int argc, char **argv)
     }
     if (arguments.empty) {
         empty(arguments);
-    // } else {
-    //     if (arguments.n_expected_lines == -1) {
-    //         arguments.n_expected_lines = 1;
-    //     }
-    //     one(arguments);
-    // }
     } else {
+        if (arguments.n_expected_lines == -1) {
+            arguments.n_expected_lines = 1;
+        }
         one(arguments);
     }
 }
