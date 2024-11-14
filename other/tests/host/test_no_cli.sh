@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 # Halt on error.
-# set -euo pipefail
+set -euo pipefail
 
 # Go to execution directory.
 cd "$(git rev-parse --show-toplevel)"
