@@ -29,6 +29,7 @@ endif
 
 CC := gcc-13
 export CFLAGS += \
+    -fanalyzer \
     -pedantic \
     -std=c2x \
     -Wextra \
