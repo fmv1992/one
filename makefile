@@ -37,6 +37,7 @@ export CFLAGS += \
     -Werror \
     -Wstrict-prototypes \
     -I ./one/include/ \
+    -D_FORTIFY_SOURCE=2 \
     -D GIT_COMMIT='"$(GIT_COMMIT)"'
 
 # High level actions. --- {{{
