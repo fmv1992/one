@@ -29,6 +29,7 @@ endif
 
 CC := gcc-13
 export CFLAGS += \
+    -fanalyzer \
     -pedantic \
     -std=c2x \
     -Wextra \
@@ -36,6 +37,7 @@ export CFLAGS += \
     -Werror \
     -Wstrict-prototypes \
     -I ./one/include/ \
+    -D_FORTIFY_SOURCE=2 \
     -D GIT_COMMIT='"$(GIT_COMMIT)"'
 
 # High level actions. --- {{{
