@@ -1,12 +1,61 @@
 # `one`
 
-One line summary.
+Print stdin to stdout of the number of lines is exactly n (default n=1).
 
-Longer explanation 01.
+Examples:
 
-Longer explanation 02.
+*   ```
+    printf 'valid' | one
+    ```
+
+    *   Stdout: `valid` (one line).
+
+    *   Exit code: 0.
+
+*   ```
+    printf 'invalid01\ninvalid02\n' | one
+    ```
+
+    *   Stdout: empty.
+
+    *   Stderr:
+
+        ```
+        Got 2 lines, expected 1:
+        ———
+        invalid01
+        invalid02
+        ———
+        ```
+
+    *   Exit code: 1.
+
+*   ```
+    seq 1 5 | one --lines 5
+    ```
+
+    *   Stdout:
+
+        ```
+        1
+        2
+        3
+        4
+        5
+        ```
+
+    *   Exit code: 0.
 
 ## Testing
+
+```
+cdp one
+clear
+rm ./bin/one*
+make format host_compile host_run host_test release
+sudo_is_unlocked
+sudo make install
+```
 
 ## Quality standards
 
