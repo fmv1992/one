@@ -49,11 +49,15 @@ Examples:
 ## Testing
 
 ```
-cdp one
-clear
+rm ./bin/one*
+make format host_compile host_run host_test
+```
+
+## Installing
+
+```
 rm ./bin/one*
 make format host_compile host_run host_test release
-sudo_is_unlocked
 sudo make install
 ```
 
