@@ -1,2 +1,3 @@
-1731466738,t_319_a_one_in_c
-1731466741,t_319_a_one_in_c_local
+timestamp_delete_if_commit_is_older,branch,timestamp_delete_after
+1731466738,t_319_a_one_in_c,0
+1731466741,t_319_a_one_in_c_local,0
