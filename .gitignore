@@ -67,6 +67,9 @@ _build/
 project/
 target/
 tmp/
+!tmp/
+tmp/*
+!tmp/.gitkeep
 typer_ann/
 obj/
 bin/
