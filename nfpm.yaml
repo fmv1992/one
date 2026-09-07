@@ -1,0 +1,22 @@
+# `nfpm`: <https://nfpm.goreleaser.com/docs/configuration/>.
+# yaml-language-server: $schema=https://nfpm.goreleaser.com/schema.json
+name: one
+arch: amd64
+platform: linux
+version: 'ἀριθμὸς_γενεῆς'
+version_schema: semver
+release: 1
+maintainer: Felipe M. Vieira <fmv1992@gmail.com>
+description: one package.
+homepage: https://example.com
+license: GPLv3 or newer.
+# # Runtime dependencies.
+# depends:
+#     - git
+contents:
+    - src: ./one/bin/one
+      dst: /usr/bin/one
+      file_info:
+        mode: 0755
+
+# vim: set filetype=yaml fileformat=unix nowrap spell spelllang=en ts=4 sts=4 sw=4 :

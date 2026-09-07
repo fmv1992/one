@@ -1,4 +1,4 @@
-# Ignore everything
+# Ignore everything.
 *
 
 # But not these files...
@@ -34,17 +34,23 @@
 !*.vim
 !.yamlfmt
 !.copier-answers.yml
+!nfpm.yaml
+!.version
 
-# Ada & Alire files
+# Ada & Alire files.
 !*.adb
 !*.ads
 !*.gpr
 !alire.toml
 
-# Git files.
+# Git files & custom hooks directory.
 !post-checkout
 !pre-commit
 !prepare-commit-msg
+!other/git/hooks/*
+
+# Test scripts directory.
+!other/tests/*
 
 # `gnu_make_api` files.
 !deleted
