@@ -95,7 +95,12 @@ test: test_ada test_unit_test test_package_test
 
 # Run Ada tests.
 test_ada:
+    #!/usr/bin/env bash
+    set -Eeuo pipefail
+    set -x
+    rm ./tmp/.test_mark.txt &> /dev/null || true
     alr test
+    [[ -f ./tmp/.test_mark.txt ]]
 
 test_unit_test:
     set -x ; DOCKER_RUN_CMD='bash -c '"'"'bash -xv ./other/tests/test.sh'"'" just run
