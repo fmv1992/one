@@ -1,8 +1,12 @@
-# Ignore everything.
+# Ignore everything
 *
 
 # But not these files...
 !*.c
+!*.h
+!*.s
+!*.S
+!*.ld
 !compose.yaml
 !*.config
 !dockerfile
@@ -31,7 +35,7 @@
 !.yamlfmt
 !.copier-answers.yml
 
-# Ada & Alire files.
+# Ada & Alire files
 !*.adb
 !*.ads
 !*.gpr
@@ -51,7 +55,7 @@
 # ...even if they are in subdirectories
 !*/
 
-# But do ignore these directories
+# But do ignore these directories (and their contents entirely)
 _build/
 .metals/
 project/
@@ -60,6 +64,7 @@ tmp/
 typer_ann/
 obj/
 bin/
+share/
 alire/*
 !alire/alire.lock
 
