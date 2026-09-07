@@ -1,0 +1,184 @@
+#!/usr/bin/env bash
+#
+# # History:
+#
+# * 2025-10-06: `commit_dba566c`: before changing to `docopts`.
+# * 2025-10-08: `commit_f1a808f`: changed to `docopts`.
+# * 2026-01-29: `commit_c2ae331`: approach with functions
+#
+# * * *
+#
+# Google style guide: <https://google.github.io/styleguide/shellguide.html>.
+
+set -o errtrace -o errexit -o nounset -o pipefail -o noclobber
+
+# Global variables (set by parse_options).
+INPUT_=''
+OUTPUT_=''
+
+# Global variables (set by setup).
+SCRIPT_DIR=''
+PROJECT_ROOT=''
+TMPDIR_=''
+
+readonly USAGE=$(
+    cat <<- 'EOF'
+Usage:
+    one --input=<input-file> --output=<output-file>
+    one --help
+    one --version
+EOF
+)
+
+#######################################
+# Ensure docopts is available.
+# Globals:
+#   None.
+# Arguments:
+#   None.
+# Outputs:
+#   None.
+# Returns:
+#   1 if docopts not found.
+#######################################
+function _ensure_has_docopts() {
+    local n_params=0
+    if ((n_params != $#)); then
+        echo "Illegal number of parameters ($#): '$*'. Expected ${n_params}." >&2
+        return 1
+    fi
+
+    if ! command -v docopts &> /dev/null; then
+        echo 'This script uses `docopts` to parse the CLI, and `docopts` was not found.' >&2
+        exit 1
+    fi
+}
+
+#######################################
+# Check dependencies.
+# Globals:
+#   None.
+# Arguments:
+#   None.
+# Outputs:
+#   None.
+#######################################
+function check() {
+    local n_params=0
+    if ((n_params != $#)); then
+        echo "Illegal number of parameters ($#): '$*'. Expected ${n_params}." >&2
+        return 1
+    fi
+
+    _ensure_has_docopts
+}
+
+#######################################
+# Setup environment and temporary workspace.
+# Globals:
+#   SCRIPT_DIR: set to directory containing this script.
+#   PROJECT_ROOT: set to git repository root.
+#   TMPDIR_: set to temporary workspace path.
+# Arguments:
+#   None.
+# Outputs:
+#   None.
+#######################################
+function setup() {
+    local n_params=0
+    if ((n_params != $#)); then
+        echo "Illegal number of parameters ($#): '$*'. Expected ${n_params}." >&2
+        return 1
+    fi
+
+    SCRIPT_DIR="$(dirname "$(readlink --canonicalize "${0}")")"
+    cd "${SCRIPT_DIR}"
+    # PROJECT_ROOT="$(git rev-parse --show-toplevel)"
+    # cd "${PROJECT_ROOT}"
+    # [[ -d ./.git ]]
+
+    local bname
+    bname="$(basename "$0")"
+    TMPDIR_="$(mktemp --directory --tmpdir=/tmp/ "tmp.${bname}.$(date '+%s').XXXXXX")"
+    trap 'rm -rf "${TMPDIR_}"' EXIT INT TERM HUP
+}
+
+#######################################
+# Parse CLI options and validate inputs.
+# Globals:
+#   USAGE: docopt usage string.
+#   INPUT_: set to input file path.
+#   OUTPUT_: set to output file path.
+# Arguments:
+#   $@: raw command line arguments.
+# Outputs:
+#   None.
+# Returns:
+#   Exits with 1 if validation fails.
+#######################################
+function parse_options() {
+    # `note-01`: This is one of the few functions that don't check the arg
+    # count.
+    local -A args
+    eval "$(docopts -A args -h "${USAGE}" -V "one ἀριθμὸς_γενεῆς γιτ_συνθεσίη" : "$@")"
+
+    INPUT_="${args['--input']}"
+    OUTPUT_="${args['--output']}"
+
+    local exit_code=0
+
+    if [[ ! -f ${INPUT_} ]]; then
+        echo "Input file «${INPUT_}» does not exist." >&2
+        exit_code=1
+    fi
+
+    if [[ -e ${OUTPUT_} ]]; then
+        echo "I will not overwrite the output file: «${OUTPUT_}»." >&2
+        exit_code=1
+    fi
+
+    if [[ ${exit_code} != '0' ]]; then
+        exit "${exit_code}"
+    fi
+}
+
+#######################################
+# Main execution logic.
+# Globals:
+#   INPUT_: input file path.
+#   OUTPUT_: output file path.
+#   TMPDIR_: temporary workspace path.
+# Arguments:
+#   None.
+# Outputs:
+#   None.
+#######################################
+function run() {
+    local n_params=0
+    if ((n_params != $#)); then
+        echo "Illegal number of parameters ($#): '$*'. Expected ${n_params}." >&2
+        return 1
+    fi
+
+    :
+}
+
+#######################################
+# Script entry point.
+# Globals:
+#   None.
+# Arguments:
+#   $@: raw command line arguments.
+#######################################
+function main() {
+    # `note-01`: This is one of the few functions that don't check the arg
+    # count.
+    check
+    setup
+    parse_options "${@}"
+    run
+}
+
+main "$@"
+
+# vim: set filetype=sh fileformat=unix nowrap:

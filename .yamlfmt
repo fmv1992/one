@@ -1,0 +1,6 @@
+formatter:
+    type: basic
+    indent: 4
+    max_line_length: 999
+
+# vim: set filetype=yaml fileformat=unix nowrap spell spelllang=en:
