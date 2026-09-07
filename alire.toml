@@ -9,3 +9,6 @@ website = ""
 tags = []
 
 executables = ["one"]
+
+[[depends-on]]
+aunit = "^26.0.0"
