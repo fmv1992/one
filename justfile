@@ -91,7 +91,11 @@ build:
 check:
 
 # Run tests.
-test: test_unit_test test_package_test
+test: test_ada test_unit_test test_package_test
+
+# Run Ada tests.
+test_ada:
+    alr test
 
 test_unit_test:
     set -x ; DOCKER_RUN_CMD='bash -c '"'"'bash -xv ./other/tests/test.sh'"'" just run
