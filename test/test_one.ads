@@ -10,8 +10,10 @@ package Test_Math is
    procedure Register_Tests (T : in out Test_Case);
 
    -- Individual test routines.
-   procedure Test_Addition (T : in out AUnit.Test_Cases.Test_Case'Class);
-
-   -- Individual test routines.
-   procedure Test_Addition (T : in out AUnit.Test_Cases.Test_Case'Class);
+   procedure Test_Addition_Basic (T : in out AUnit.Test_Cases.Test_Case'Class);
+   procedure Test_Addition_Negative (T : in out AUnit.Test_Cases.Test_Case'Class);
+   procedure Test_Subtraction_Basic (T : in out AUnit.Test_Cases.Test_Case'Class);
+   procedure Test_Subtraction_Negative (T : in out AUnit.Test_Cases.Test_Case'Class);
+   procedure Test_Ensure_Tests_Are_Run
+      (T : in out AUnit.Test_Cases.Test_Case'Class);
 end Test_Math;

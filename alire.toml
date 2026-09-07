@@ -12,3 +12,11 @@ executables = ["one"]
 
 [[depends-on]]
 aunit = "^26.0.0"
+
+[[actions]]
+type = "test"
+command = ["alr", "exec", "--", "gprbuild", "-P", "test/test.gpr"]
+
+[[actions]]
+type = "test"
+command = ["./bin/test_runner"]
