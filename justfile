@@ -94,13 +94,17 @@ check:
 test: test_ada test_unit_test test_package_test
 
 # Run Ada tests.
-test_ada:
+test_ada: prove_ada
     #!/usr/bin/env bash
     set -Eeuo pipefail
     set -x
     rm ./tmp/.test_mark.txt &> /dev/null || true
     alr test
     [[ -f ./tmp/.test_mark.txt ]]
+
+# Run Ada proof checks.
+prove_ada:
+    alr exec -- gnatprove -P one.gpr --warnings=error
 
 test_unit_test:
     set -x ; DOCKER_RUN_CMD='bash -c '"'"'bash -xv ./other/tests/test.sh'"'" just run
@@ -150,7 +154,12 @@ env DIST_DIR="./dist" nfpm package --config ./nfpm.yaml --packager deb --target 
 package:
     DOCKER_RUN_CMD={{ quote(_NFPM_SCRIPT) }} just run
 # Format all files.
-format: format_yaml format_json format_rec
+format: format_ada format_yaml format_json format_rec
+
+# Format Ada files.
+format_ada:
+    alr exec -- gnatpp --replace -P one.gpr
+    alr exec -- gnatpp --replace -P test/test.gpr
 
 # Format YAML files.
 format_yaml:
